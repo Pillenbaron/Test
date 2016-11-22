@@ -114,36 +114,39 @@ namespace FirstCommand
 
 
             DTE _Service = (DTE)this.ServiceProvider.GetService(typeof(DTE));
-            _Service.Events.BuildEvents.OnBuildDone += _BuildDone;
-            SolutionBuild solBuild = _Service.Solution.SolutionBuild;
-            solBuild.ActiveConfiguration.Activate();
-            solBuild.Build(false);
+            //_Service.Events.BuildEvents.OnBuildDone += _BuildDone;
+            //SolutionBuild solBuild = _Service.Solution.SolutionBuild;
+            //solBuild.ActiveConfiguration.Activate();
+            //solBuild.Build(false);
 
-            _Service.Solution.Projects.Item(0).ConfigurationManager.ActiveConfiguration
-            Project _Project = (Project)this.ServiceProvider.GetService(typeof(Project));
+            Properties PropertieList = null;
 
-            //Projects projects = _Project.ConfigurationManager.ActiveConfiguration.Properties.Item(if);
-        
-            for (int i = 1; i <= _Project.ConfigurationManager.ActiveConfiguration.Properties.Count; i++)
+            foreach (Project cProject in _Service.Solution.Projects)
             {
 
-                //Solution.Model.ProjectData Project = new Solution.Model.ProjectData();
+                PropertieList = cProject.ConfigurationManager.ActiveConfiguration.Properties;
+                break;
 
-                //Project.Assembly.Titel = projects.Item(i).DTE.
+            }
 
-                foreach (Property property in projects.Item(i).Properties)
+            //Projects projects = _Project.ConfigurationManager.ActiveConfiguration.Properties.Item(if);
+
+            //Solution.Model.ProjectData Project = new Solution.Model.ProjectData();
+
+            //Project.Assembly.Titel = projects.Item(i).DTE.
+
+            foreach (Property property in PropertieList)
+            {
+                try
                 {
-                    try
-                    {
 
-                        System.Diagnostics.Debug.Print($"{property.Name}|{property.Value.ToString()}|{property.Value.GetType().ToString()}");
+                    System.Diagnostics.Debug.Print($"{property.Name}|{property.Value.ToString()}|{property.Value.GetType().ToString()}");
 
-                    }
-                    catch (Exception)
-                    {
+                }
+                catch (Exception)
+                {
 
-                        System.Diagnostics.Debug.Print("Fehler!");
-                    }
+                    System.Diagnostics.Debug.Print("Fehler!");
 
                 }
 
