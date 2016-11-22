@@ -111,11 +111,20 @@ namespace FirstCommand
         private void StartNotepad(object sender, EventArgs e)
         {
 
+
+
             DTE _Service = (DTE)this.ServiceProvider.GetService(typeof(DTE));
+            _Service.Events.BuildEvents.OnBuildDone += _BuildDone;
+            SolutionBuild solBuild = _Service.Solution.SolutionBuild;
+            solBuild.ActiveConfiguration.Activate();
+            solBuild.Build(false);
 
-            Projects projects = _Service.Solution.Projects;
+            _Service.Solution.Projects.Item(0).ConfigurationManager.ActiveConfiguration
+            Project _Project = (Project)this.ServiceProvider.GetService(typeof(Project));
 
-            for (int i = 1; i <= projects.Count; i++)
+            //Projects projects = _Project.ConfigurationManager.ActiveConfiguration.Properties.Item(if);
+        
+            for (int i = 1; i <= _Project.ConfigurationManager.ActiveConfiguration.Properties.Count; i++)
             {
 
                 //Solution.Model.ProjectData Project = new Solution.Model.ProjectData();
@@ -140,7 +149,54 @@ namespace FirstCommand
 
             }
 
-            //System.Windows.MessageBox.Show(Projects);
+            ////System.Windows.MessageBox.Show(Projects);
+
+        }
+
+        public void _BuildDone(vsBuildScope Scope, vsBuildAction Action)
+        {
+
+            DTE _Service = (DTE)this.ServiceProvider.GetService(typeof(DTE));
+
+
+            try
+            {
+
+                if (Scope == vsBuildScope.vsBuildScopeSolution)
+                {
+
+                    switch (Action)
+                    {
+                        case vsBuildAction.vsBuildActionBuild:
+                            System.Windows.MessageBox.Show($"{Scope.ToString()}/{Action.ToString()}");
+                            break;
+                        case vsBuildAction.vsBuildActionRebuildAll:
+                            System.Windows.MessageBox.Show($"{Scope.ToString()}/{Action.ToString()}");
+                            break;
+                        case vsBuildAction.vsBuildActionClean:
+                            System.Windows.MessageBox.Show($"{Scope.ToString()}/{Action.ToString()}");
+                            break;
+                        case vsBuildAction.vsBuildActionDeploy:
+                            System.Windows.MessageBox.Show($"{Scope.ToString()}/{Action.ToString()}");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+
+            }
+            finally
+            {
+
+                _Service.Events.BuildEvents.OnBuildDone -= _BuildDone;
+
+            }
 
         }
 
