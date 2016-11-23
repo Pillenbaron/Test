@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
 using EnvDTE;
+using Microsoft.VisualStudio.CommandBars;
 
 namespace FirstCommand
 {
@@ -111,48 +112,99 @@ namespace FirstCommand
         private void StartNotepad(object sender, EventArgs e)
         {
 
-
-
             DTE _Service = (DTE)this.ServiceProvider.GetService(typeof(DTE));
-            //_Service.Events.BuildEvents.OnBuildDone += _BuildDone;
-            //SolutionBuild solBuild = _Service.Solution.SolutionBuild;
-            //solBuild.ActiveConfiguration.Activate();
-            //solBuild.Build(false);
 
-            Properties PropertieList = null;
+            CommandBars commandBars;
 
-            foreach (Project cProject in _Service.Solution.Projects)
+            try
             {
 
-                PropertieList = cProject.ConfigurationManager.ActiveConfiguration.Properties;
-                break;
+                // The following cast is required in VS 2005 and higher because its DTE.CommandBars returns the type Object
+                // (because VS 2005 and higher uses for commandbars the type Microsoft.VisualStudio.CommandBars.CommandBars 
+                // of the new Microsoft.VisualStudio.CommandBars.dll assembly while VS.NET 2002/2003 used the 
+                // type Microsoft.Office.Core.CommandBars of the Office.dll assembly)
+
+                commandBars = (CommandBars)_Service.CommandBars;
+
+                foreach (CommandBar commandBar in commandBars)
+                {
+                    //using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\VisualStudioCommandBars.txt"))
+                    //{
+
+                        foreach (CommandBarControl commandBarControl1 in commandBar.Controls)
+                        {
+
+                            try
+                            {
+                                System.Diagnostics.Debug.Print("----------------------------------------");
+                                System.Diagnostics.Debug.Print($"Candidate CommandBar Name: {commandBar.Name}");
+                                System.Diagnostics.Debug.Print("Captions on this command bar:");
+
+                                foreach (CommandBarControl commandBarControl2 in commandBar.Controls)
+                                {
+                                    System.Diagnostics.Debug.Print($"Command: {commandBarControl2.Caption}");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+
+                                System.Diagnostics.Debug.Print($"Error @: {commandBar.Name}/{ex.ToString()}");
+                            }
+
+
+
+                        }
+
+                    //}
+
+                }
 
             }
-
-            //Projects projects = _Project.ConfigurationManager.ActiveConfiguration.Properties.Item(if);
-
-            //Solution.Model.ProjectData Project = new Solution.Model.ProjectData();
-
-            //Project.Assembly.Titel = projects.Item(i).DTE.
-
-            foreach (Property property in PropertieList)
+            catch (Exception ex)
             {
-                try
-                {
-
-                    System.Diagnostics.Debug.Print($"{property.Name}|{property.Value.ToString()}|{property.Value.GetType().ToString()}");
-
-                }
-                catch (Exception)
-                {
-
-                    System.Diagnostics.Debug.Print("Fehler!");
-
-                }
-
+                System.Diagnostics.Debug.Print(ex.ToString());
             }
 
-            ////System.Windows.MessageBox.Show(Projects);
+            //DTE _Service = (DTE)this.ServiceProvider.GetService(typeof(DTE));
+            ////_Service.Events.BuildEvents.OnBuildDone += _BuildDone;
+            ////SolutionBuild solBuild = _Service.Solution.SolutionBuild;
+            ////solBuild.ActiveConfiguration.Activate();
+            ////solBuild.Build(false);
+
+            //Properties PropertieList = null;
+
+            //foreach (Project cProject in _Service.Solution.Projects)
+            //{
+
+            //    PropertieList = cProject.ConfigurationManager.ActiveConfiguration.Properties;
+            //    break;
+
+            //}
+
+            ////Projects projects = _Project.ConfigurationManager.ActiveConfiguration.Properties.Item(if);
+
+            ////Solution.Model.ProjectData Project = new Solution.Model.ProjectData();
+
+            ////Project.Assembly.Titel = projects.Item(i).DTE.
+
+            //foreach (Property property in PropertieList)
+            //{
+            //    try
+            //    {
+
+            //        System.Diagnostics.Debug.Print($"{property.Name}|{property.Value.ToString()}|{property.Value.GetType().ToString()}");
+
+            //    }
+            //    catch (Exception)
+            //    {
+
+            //        System.Diagnostics.Debug.Print("Fehler!");
+
+            //    }
+
+            //}
+
+            //////System.Windows.MessageBox.Show(Projects);
 
         }
 
