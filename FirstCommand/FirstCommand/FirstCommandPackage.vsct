@@ -37,7 +37,10 @@
          must be a menu. -->
     <Groups>
       <Group guid="guidFirstCommandPackageCmdSet" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJWIN_FILECONTENTS"/>
+      </Group>
+      <Group guid="guidFirstCommandPackageCmdSet" id="SolutionGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE"/>
       </Group>
     </Groups>
 
@@ -52,12 +55,19 @@
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
-      <Button guid="guidFirstCommandPackageCmdSet" id="FirstCommandId" priority="0x0100" type="Button">
+      <Button guid="guidFirstCommandPackageCmdSet" id="MyMenuGroup" priority="0x0100" type="Button">
         <Parent guid="guidFirstCommandPackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <ButtonText>Notepad</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidFirstCommandPackageCmdSet" id="SolutionGroup" priority="0x0100" type="Button">
+        <Parent  guid="guidFirstCommandPackageCmdSet" id="SolutionGroup"/>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>IDG_VS_CTXT_SOLUTION_EXPLORE</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -80,7 +90,7 @@
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidFirstCommandPackageCmdSet" value="{880fdc35-6cba-42ca-b9e7-016a595b9450}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
-      <IDSymbol name="FirstCommandId" value="0x0100" />
+      <IDSymbol name="SolutionGroup" value="0x0100" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{60ea5d06-9e9c-4451-b108-4be26625eabc}" >
